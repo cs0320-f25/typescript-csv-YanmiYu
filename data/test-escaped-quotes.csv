@@ -1,0 +1,3 @@
+header1,header2
+"normal quoted","quoted with ""escaped"" quotes"
+"multiple ""escaped"" quotes","text with ""quotes"" inside"
