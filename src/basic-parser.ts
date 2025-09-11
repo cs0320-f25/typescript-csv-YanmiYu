@@ -13,9 +13,11 @@ import z from 'zod'
  * You shouldn't need to alter them.
  * 
  * @param path The path to the file being loaded.
- * @returns a "promise" to produce a 2-d array of cell values
+ * @param schema Optional Zod schema to validate and transform CSV rows.
+ * @returns a "promise" to produce a 2-d array of cell values or array of schema-validated objects
  */
-export async function parseCSV(path: string): Promise<string[][]> {
+                    
+export async function parseCSV<T = string[]>(path: string, schema?: z.ZodType<T>): Promise<T[] | string[][]> {
   // This initial block of code reads from a file in Node.js. The "rl"
   // value can be iterated over in a "for" loop. 
   const fileStream = fs.createReadStream(path);
@@ -24,15 +26,27 @@ export async function parseCSV(path: string): Promise<string[][]> {
     crlfDelay: Infinity, // handle different line endings
   });
   
-  // Create an empty array to hold the results
-  let result = []
+  // Create an array to hold the results
+  const result: (T | string[])[] = [];
   
   // We add the "await" here because file I/O is asynchronous. 
   // We need to force TypeScript to _wait_ for a row before moving on. 
   // More on this in class soon!
   for await (const line of rl) {
     const values = line.split(",").map((v) => v.trim());
-    result.push(values)
+
+    if (schema) {
+      const parsed = schema.safeParse(values);
+      if (parsed.success) {
+        result.push(parsed.data);
+      } else {
+        throw new Error(`CSV row validatiled at line ${result.length + 1}: ${parsed.error.message}`);
+      }
+    } else {
+      result.push(values);
+    }
   }
-  return result
+  
+  // Type assertion to help TypeScript understand the return type
+  return schema ? result as T[] : result as string[][];
 }

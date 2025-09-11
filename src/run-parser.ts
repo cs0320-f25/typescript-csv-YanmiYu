@@ -1,5 +1,5 @@
 import { parseCSV } from "./basic-parser";
-
+import { z } from 'zod';
 /*
   Example of how to run the parser outside of a test suite.
 */
