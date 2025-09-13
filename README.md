@@ -42,7 +42,10 @@ khjeong
 
 #### Collaborators (cslogins of anyone you worked with on this project and/or generative AI):
 khjeong, ChatGPT, claude 3.7
+Did not use coplite this time because I signed up github education pack late and whenever I try to use it, a message "Oops, your response got filtered. Vote down if you think this shouldn't have happened." pop up.
+
 #### Total estimated time it took to complete project:
+3
 
 #### Link to GitHub Repo:  
-
+https://github.com/cs0320-f25/typescript-csv-YanmiYu.git
